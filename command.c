@@ -20,7 +20,7 @@ _	6>2		_.0
 */
 struct COMMAND **com; // com[N][M]
 int N, M;
-char alf[21]; // алфавит
+char alf[256]; // алфавит
 
 void clearCom()
 {
@@ -28,22 +28,22 @@ void clearCom()
 	{
 		for(int j=0; j<M; j++ )
 		{
-			com[i][j].set = com[i][j].com = '#';
+			com[i][j].mark = com[i][j].com = '#';  //i-ая строка j-ый столбец
 			com[i][j].q=-1;
 		}
 	}
 }
 
-void loadCom()
+void loadCom(char **input)
 {
-	FILE *in = fopen("fcom.txt", "rt");
-	fscanf(in, " %s %d", alf, &M);
-	N = strlen(alf);
+	FILE *in = fopen(input, "rt");
+	fscanf(in, " %s %d", &alf, &M);
+	N = (int) strlen((const char *) &alf); //counter //кол-во символов в алфавите
 	// com[len][q]
-	com = (struct COMMAND **)calloc(N, sizeof(struct COMMAND *) );
-	for( int i=0; i<N; i++ )
+	com = (struct COMMAND **)calloc((size_t) N, sizeof(struct COMMAND *) );
+	for(int i=0; i <  N; i++ )
 	{
-		com[i] = (struct COMMAND *)calloc( M, sizeof(struct COMMAND) );
+		com[i] = (struct COMMAND *)calloc((size_t) M, sizeof(struct COMMAND) );
 	}
 	clearCom();
 
@@ -60,9 +60,9 @@ void loadCom()
 			{
 				continue;
 			}
-			com[i][j].set = str[0];
+			com[i][j].mark = str[0];
 			com[i][j].com = str[1];
-			com[i][j].q = atoi(str+2);
+			com[i][j].q = atoi(str+2); //указываем на начало номера состояния, считываем его и переводим в int
 		}
 	}
 	fclose(in);
@@ -81,7 +81,7 @@ void printCom()
 		for(int j=0; j<M; j++ )
 		{
 			if( com[i][j].q != -1 )
-				printf("%7c%c%d", com[i][j].set, com[i][j].com, com[i][j].q);
+				printf("%7c%c%d", com[i][j].mark, com[i][j].com, com[i][j].q);
 			else
 				printf("%9c", ' ');
 		}
@@ -95,7 +95,7 @@ void printCom1(int i, int j)
 {
 	printf("%cq%d ", alf[i], j+1);
 	if( com[i][j].q != -1 )
-		printf("%c%c%d\n", com[i][j].set, com[i][j].com, com[i][j].q);
+		printf("%c%c%d\n", com[i][j].mark, com[i][j].com, com[i][j].q);
 	else
 		printf("%c\n", '#');
 }
