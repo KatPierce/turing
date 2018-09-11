@@ -6,9 +6,6 @@ V
 12345
 */
 
-//char tape[STAPE];
-//char *tape;
-//int ptape;
 
 void clearTape(char **tape, int *ptape, int tSize )
 {
@@ -17,7 +14,7 @@ void clearTape(char **tape, int *ptape, int tSize )
     *tape = (char* )calloc(tSize, sizeof(char));
     for( int i=0; i<tSize; i++ )
     {
-        tape[i]= (char *) '_';
+        *(*tape+i)= '_';
     }
     *ptape = tSize/2;
 }
@@ -46,23 +43,28 @@ void loadTape(char *input, char **tape, int *ptape, int *tSize)
         res=fscanf( in, "%c", &ch );
         if( ch=='\n' || res==EOF)
             break;
-        tape[j++]=  ch;
+        *(*tape+j)=  ch;
+        j++;
     }
     *ptape += v;
     fclose(in);
 }
 
-void printTape(FILE *output, char **tape, int tSize, int ptape)
+void printTape(FILE *output, char *tape, int tSize, int ptape)
 {
-    int sh = 30;
-    fprintf(output, "%*c\n", sh+1, 'V');
-    for (int i = ptape - sh; i < ptape+sh; i++)
+    int gap=80;
+    int st = gap/2;
+    int i = ptape-st;
+
+    fprintf(output, "%*c\n", st+1, 'V');
+    for (int k=0; k < gap; i++, k++)
     {
-        if (tape[i] == '_')
-            printf(" ");
+        if(!(tape[i]=='_'|| i<0 || i>tSize ))
+            fprintf(output,"%c",tape[i]);
         else
-            printf("%c",tape[i]);
+            fprintf(output," ");
     }
+
     fprintf(output,"\n\n");
 }
 
@@ -93,6 +95,8 @@ void Right(int *ptape, int *tSize, char **tape )
         return;
     *tSize += EXTAPE;
     *tape = (char *)realloc(*tape, *tSize);
+    for( int i= *ptape; i< *tSize; i++ )
+        *(*tape+i)= '_';
 }
 
 void setTape( char *tape, int ptape, char ch)

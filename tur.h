@@ -12,13 +12,15 @@
 
 #define STAPE 20 //размер ленты
 #define EXTAPE 50 //расширение ленты
-#define ENTER 13 //код клавиш
-#define DOWN 80
-#define ESC 27
+#define ENTER 10 //код клавиш
+//#define DOWN 80
+//#define ESC 27
+#define STOP 115
+#define STEP 32
 
 void clearTape(char **tape, int *ptape, int tSize);
 void loadTape(char *input, char **tape, int *ptape, int *tSize);
-void printTape(FILE *output, char **tape, int tSize, int ptape);
+void printTape(FILE *output, char *tape, int tSize, int ptape);
 void Left(int *ptape, int *tSize, char **tape );
 void Right(int *ptape, int *tSize, char **tape );
 void setTape(char *tape, int ptape, char ch);
@@ -34,7 +36,7 @@ struct COMMAND
 };
 
 void clearCom();
-void loadCom(char **input);
+void loadCom(char *fcom);
 void printCom();
 void printCom1(int i, int j);
 

@@ -34,11 +34,12 @@ void clearCom()
 	}
 }
 
-void loadCom(char **input)
+void loadCom(char *fcom)
 {
-	FILE *in = fopen(input, "rt");
-	fscanf(in, " %s %d", &alf, &M);
-	N = (int) strlen((const char *) &alf); //counter //кол-во символов в алфавите
+	FILE *in;
+	in	= fopen(fcom, "rt");
+	fscanf(in, " %s %d", alf, &M);
+	N = (int) strlen((const char *) alf); //counter //кол-во символов в алфавите
 	// com[len][q]
 	com = (struct COMMAND **)calloc((size_t) N, sizeof(struct COMMAND *) );
 	for(int i=0; i <  N; i++ )

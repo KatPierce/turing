@@ -29,12 +29,12 @@ int main(int argc, char *args[]) {
         return -1;
     }
 
-    printf(args[3]);
+
     loadTape(args[2], &tape, &ptape, &tSize);
-    printTape(stdout, &tape, tSize, ptape);
+    printTape(stdout, tape, tSize, ptape);
     loadCom(args[3]);
     printCom();
-    run((char *) &args[4], mode, &tape, &ptape, &tSize);
+    run(args[4], mode, &tape, &ptape, &tSize);
 
     if (tape != NULL)
         free(tape);

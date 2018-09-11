@@ -1,3 +1,4 @@
+#include <rpc.h>
 #include "tur.h"
 
 void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
@@ -7,13 +8,13 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
     FILE *oFile;
     int x;
 
-    oFile = fopen(&output, "wt");
+    oFile = fopen(output, "wt");
     if (oFile == NULL) {
         printf("Output file %s can't be open.\n", output);
         exit(1);
     }
     if (mode) {
-        printf("Press DOWN for next step, ENTER - run program, ESC- finish program");
+        printf("Press DOWN for next step, ENTER - run program, ESC- finish program \n");
     }
     for (int i = 0; i < N;) {
         for (int j = 0; j < M;) {
@@ -21,12 +22,13 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
                 continue;
             // print
             printTape(oFile, *tape, *tSize, *ptape);
+            printTape(stdout, *tape, *tSize, *ptape);
             printCom1(i, j);
 
             comType = com[i][j].mark;
             switch (comType) {
                 case 'W':
-                    setTape(*tape, *tSize, com[i][j].com);
+                    setTape(*tape, *ptape, com[i][j].com);
                     break;
                 case 'S':
                     move(com[i][j].com, ptape, tSize, tape);
@@ -37,6 +39,7 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
                     break;
                 default:
                     printf("Wrong command. There must be W or S \n");
+                    exit(1);
                     break;
             } //разбираем команду: W- запись на ленту, S- сдвиг
 
@@ -49,28 +52,27 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
 
             //режим отладки
             if (mode) {
-                do {
-                    x = getch();
-                    if (x == DOWN)
+                    x= getc(stdin);
+                    fflush(stdin);
+                switch (x) {
+                    case ENTER:
+                        mode =false;
                         break;
-                    if (x == ENTER) {
-                        mode = false;
-                        break;
-                    }
-                    if (x == ESC) {
+                    case STOP:
                         printf("Program was stopped.\n");
-                        fprintf(oFile, "Program was stopped.\n");
-                        return;
-                    }
-                    printf("Wrong key. Press Enter/Esc/Down");
-
-                } while (1);
+                       fprintf(oFile, "Program was stopped.\n");
+                       return;
+                    case STEP:
+                        break;
+                    default: printf("Wrong key. Press Enter/Esc/Down \n");
+                        exit(1);
+                }
             }
 
 
             // new i j
             j = com[i][j].q - 1;
-            char ch = *tape[*ptape];
+            char ch = *(*tape+*ptape);
             char ch2;
             for (int k = 0; k < len; k++) {
                 ch2 = alf[k];
@@ -85,6 +87,7 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
     } // end for i
 
     printTape(oFile, *tape, *tSize, *ptape);
+    printTape(stdout, *tape, *tSize, *ptape);
     fprintf(oFile, "STOP\n");
     fclose(oFile);
 }
