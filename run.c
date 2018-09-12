@@ -14,7 +14,7 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
         exit(1);
     }
     if (mode) {
-        printf("Press DOWN for next step, ENTER - run program, ESC- finish program \n");
+        printf("Print 'k' for next step, ENTER - run program, 's'- finish program \n");
     }
     for (int i = 0; i < N;) {
         for (int j = 0; j < M;) {
@@ -64,7 +64,7 @@ void run(char *output, bool mode, char **tape, int *ptape, int *tSize) {
                        return;
                     case STEP:
                         break;
-                    default: printf("Wrong key. Press Enter/Esc/Down \n");
+                    default: printf("Wrong key. Press Enter/s/k \n");
                         exit(1);
                 }
             }

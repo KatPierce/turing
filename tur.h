@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <conio.h>
 
-#define STAPE 20 //размер ленты
+#define STAPE 100 //размер ленты
 #define EXTAPE 50 //расширение ленты
 #define ENTER 10 //код клавиш
 //#define DOWN 80
